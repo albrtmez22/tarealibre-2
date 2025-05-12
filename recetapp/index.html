@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecetApp - Tu buscador de recetas personalizado</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <i class="fas fa-utensils logo-icon"></i>
+            <h1>RecetApp</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active" id="nav-search">Buscar</a></li>
+                <li><a href="#" id="nav-favorites">Favoritos</a></li>
+                <li><a href="#" id="nav-planner">Planificador</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Sección de búsqueda -->
+        <section id="search-section" class="active-section">
+            <div class="search-container">
+                <h2>Encuentra la receta perfecta</h2>
+                <div class="search-box">
+                    <input type="text" id="ingredients-input" placeholder="Ingresa ingredientes separados por coma (ej: pollo, arroz, limón)">
+                    <button id="search-button"><i class="fas fa-search"></i> Buscar</button>
+                </div>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Tipo de cocina:</label>
+                        <select id="cuisine-filter">
+                            <option value="">Todas</option>
+                            <option value="italian">Italiana</option>
+                            <option value="mexican">Mexicana</option>
+                            <option value="spanish">Española</option>
+                            <option value="asian">Asiática</option>
+                            <option value="american">Americana</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Tiempo máximo:</label>
+                        <select id="time-filter">
+                            <option value="">Cualquiera</option>
+                            <option value="15">15 minutos</option>
+                            <option value="30">30 minutos</option>
+                            <option value="60">1 hora</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Dificultad:</label>
+                        <select id="difficulty-filter">
+                            <option value="">Cualquiera</option>
+                            <option value="easy">Fácil</option>
+                            <option value="medium">Media</option>
+                            <option value="hard">Difícil</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-container">
+                <h3>Resultados</h3>
+                <div id="recipes-grid"></div>
+                <div id="loading" class="hidden"><i class="fas fa-spinner fa-spin"></i> Buscando recetas...</div>
+                <div id="no-results" class="hidden">No se encontraron recetas con esos ingredientes. ¡Intenta con otros!</div>
+            </div>
+        </section>
+
+        <!-- Sección de favoritos -->
+        <section id="favorites-section" class="hidden-section">
+            <h2>Mis Recetas Favoritas</h2>
+            <div class="collections">
+                <div class="collection-list">
+                    <div class="collection-item active" data-collection="all">
+                        <i class="fas fa-star"></i> Todas las favoritas
+                    </div>
+                    <div class="collection-item" data-collection="breakfast">
+                        <i class="fas fa-coffee"></i> Desayunos
+                    </div>
+                    <div class="collection-item" data-collection="lunch">
+                        <i class="fas fa-hamburger"></i> Almuerzos
+                    </div>
+                    <div class="collection-item" data-collection="dinner">
+                        <i class="fas fa-drumstick-bite"></i> Cenas
+                    </div>
+                    <div class="add-collection">
+                        <i class="fas fa-plus"></i> Nueva colección
+                    </div>
+                </div>
+                <div id="favorites-grid"></div>
+                <div id="no-favorites" class="hidden">No tienes recetas favoritas todavía. ¡Busca y guarda algunas!</div>
+            </div>
+        </section>
+
+        <!-- Sección de planificador -->
+        <section id="planner-section" class="hidden-section">
+            <h2>Planificador Semanal</h2>
+            <div class="planner-container">
+                <div class="planner-controls">
+                    <button id="prev-week"><i class="fas fa-chevron-left"></i></button>
+                    <h3 id="week-display">Semana del 12 al 18 de Mayo, 2025</h3>
+                    <button id="next-week"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="week-grid">
+                    <div class="meal-times">
+                        <div class="meal-header"></div>
+                        <div class="meal-time">Desayuno</div>
+                        <div class="meal-time">Almuerzo</div>
+                        <div class="meal-time">Cena</div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Lunes</div>
+                        <div class="meal-slot" data-day="monday" data-meal="breakfast" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="monday" data-meal="lunch" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="monday" data-meal="dinner" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Martes</div>
+                        <div class="meal-slot" data-day="tuesday" data-meal="breakfast" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="tuesday" data-meal="lunch" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="tuesday" data-meal="dinner" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Miércoles</div>
+                        <div class="meal-slot" data-day="wednesday" data-meal="breakfast" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="wednesday" data-meal="lunch" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="wednesday" data-meal="dinner" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Jueves</div>
+                        <div class="meal-slot" data-day="thursday" data-meal="breakfast" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="thursday" data-meal="lunch" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="thursday" data-meal="dinner" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Viernes</div>
+                        <div class="meal-slot" data-day="friday" data-meal="breakfast" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="friday" data-meal="lunch" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="friday" data-meal="dinner" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Sábado</div>
+                        <div class="meal-slot" data-day="saturday" data-meal="breakfast" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="saturday" data-meal="lunch" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="saturday" data-meal="dinner" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    </div>
+                    <div class="day-column">
+                        <div class="day-header">Domingo</div>
+                        <div class="meal-slot" data-day="sunday" data-meal="breakfast" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="sunday" data-meal="lunch" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                        <div class="meal-slot" data-day="sunday" data-meal="dinner" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    </div>
+                </div>
+                <div class="planner-actions">
+                    <button id="generate-shopping-list"><i class="fas fa-shopping-cart"></i> Generar lista de compras</button>
+                    <button id="clear-planner"><i class="fas fa-trash"></i> Limpiar planificador</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal para detalles de receta -->
+        <div id="recipe-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div id="recipe-details"></div>
+            </div>
+        </div>
+
+        <!-- Modal para lista de compras (eliminado) -->
+    </main>
+
+    <footer>
+        <p>&copy; 2025 RecetApp - Creado con ❤️ por [Tu Nombre]</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
